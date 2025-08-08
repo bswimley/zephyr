@@ -3,12 +3,22 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-
+#include <zephyr/sys/printk.h>
+#include <zephyr/kernel.h>
+#include <zephyr/drivers/uart.h>
 #include <stdio.h>
+
+
 
 int main(void)
 {
+
 	printf("Hello World! %s\n", CONFIG_BOARD_TARGET);
 
-	return 0;
+    while (1) {
+        k_sleep(K_FOREVER);
+    }
+
+    return 0;
+
 }

@@ -1,0 +1,7 @@
+board:
+  name: microzed
+  full_name: Microzed
+  vendor: avnet
+  socs:
+    - name: xc7z010
+

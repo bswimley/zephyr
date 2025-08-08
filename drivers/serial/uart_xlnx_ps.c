@@ -255,7 +255,7 @@ static void set_baudrate(const struct device *dev, uint32_t baud_rate)
 			} else {
 				bauderr = tmpbaud - baud;
 			}
-			if (((bauderr * 1000) / baud) < 3) {
+			if (((bauderr * 100) / baud) < 3) {
 				break;
 			}
 		}

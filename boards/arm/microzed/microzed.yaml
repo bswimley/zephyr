@@ -1,0 +1,11 @@
+identifier: microzed
+name: Avnet Microzed
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+  - gnuarmemb
+ram: 1048576
+supported:
+  - gpio
+vendor: avnet
