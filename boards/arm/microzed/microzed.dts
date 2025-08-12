@@ -45,9 +45,9 @@
 	};
 
     /* ~1 GiB DDR for .data/.bss */
-    ddr0: memory@2000 {
+    ddr0: memory@3000 {
         device_type             = "memory";
-        reg                     = <0x2000 0x3FFFE000>;
+        reg                     = <0x3000 0x3FFFD000>;
         label                  = "ddr0";
     };
 

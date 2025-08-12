@@ -1,4 +1,1 @@
-config MICROZED_USE_CUSTOM_LINKER
-    bool "Enable custom linker script for MicroZed"
-    default y
 
