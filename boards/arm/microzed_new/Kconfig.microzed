@@ -1,0 +1,6 @@
+config BOARD_MICROZED
+  bool "MicroZed"
+	select SOC_XILINX_XC7Z010
+  help
+    Enable support for the Avnet MicroZed board.
+

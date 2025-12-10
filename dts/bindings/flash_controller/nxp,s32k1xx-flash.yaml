@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: Apache-2.0
+title: NXP S32K1xx internal program flash
+
+description: >
+  Internal program flash array for S32K1xx. The node represents the memory-mapped
+  flash array that Zephyr should use for storage and MCUboot.
+
+compatible: "nxp,s32k1xx-flash"
+
+include: soc-nv-flash.yaml
+
+properties:
+  erase-block-size:
+    type: int
+    required: true
+  write-block-size:
+    type: int
+    required: true

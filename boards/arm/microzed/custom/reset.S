@@ -35,57 +35,6 @@ GDATA(z_arm_undef_stack)
 GTEXT(soc_reset_hook)
 #endif
 
-    .global mmu_cache_invalidate
-mmu_cache_invalidate:
-    stmfd sp!, {r4-r7, lr}
-
-    /* Read TTBR0 */
-    mrc p15, 0, r0, c2, c0, 0      /* r0 = TTBR0 base address */
-
-    mov r1, #0                    /* Section index (0 to 4095) */
-    mov r7, #4096                 /* Total sections (4GB / 1MB) */
-
-loop_sections:
-    /* Calculate descriptor address: r0 + r1 * 4 */
-    mov r2, r1, lsl #2
-    add r3, r0, r2
-
-    ldr r4, [r3]                  /* Load descriptor */
-
-    /* Check if it's a section entry: bits[1:0] == 0b10 */
-    and r5, r4, #0x3
-    cmp r5, #0x2
-    bne next_section              /* Skip if not section */
-
-    /* Check cacheable: C=bit4, B=bit5 */
-    and r5, r4, #(1 << 4)         /* C bit */
-    and r6, r4, #(1 << 5)         /* B bit */
-    orr r5, r5, r6
-    cmp r5, #0
-    beq next_section              /* Skip if not cacheable */
-
-    /* Get physical base address: bits[31:20] << 20 */
-    mov r5, r4, lsr #20
-    mov r5, r5, lsl #20           /* r5 = base address of section */
-
-    /* Invalidate 1MB region line-by-line (32-byte lines) */
-    mov r6, #0
-invalidate_lines:
-    add r6, r5, r6
-    mcr p15, 0, r6, c7, c6, 1     /* Invalidate D-cache line by MVA */
-    add r6, r6, #32
-    cmp r6, #0x100000             /* 1MB = 0x100000 */
-    blo invalidate_lines
-
-next_section:
-    add r1, r1, #1
-    cmp r1, r7
-    blo loop_sections
-
-    dsb
-    ldmfd sp!, {r4-r7, lr}
-    bx lr
-
 /**
  *
  * @brief Reset vector
@@ -100,23 +49,6 @@ next_section:
  */
 SECTION_SUBSEC_FUNC(TEXT, _reset_section, z_arm_reset)
 SECTION_SUBSEC_FUNC(TEXT, _reset_section, __start)
-#if defined(CONFIG_SOC_SERIES_XC7ZXXX)
-/* Invalidate instruction cache */
-
-#if 0
-    mov r0, #0
-    mcr p15, 0, r0, c7, c5, 0
-
-    mcr p15, 0, r0, c7, c5, 6
-    mcr p15, 0, r0, c7, c5, 4
-
-    isb
-#endif
-
-#if 0
-    bl mmu_cache_invalidate
-#endif
-#endif
 #if defined(CONFIG_AARCH32_ARMV8_R)
     /* Check if we are starting in HYP mode */
     mrs r0, cpsr

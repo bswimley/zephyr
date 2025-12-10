@@ -51,6 +51,18 @@ static const struct arm_mmu_region mmu_regions[] = {
 			      DT_REG_SIZE(DT_NODELABEL(gem1)),
 			      MT_DEVICE | MATTR_SHARED | MPERM_R | MPERM_W),
 #endif
+#if DT_NODE_HAS_STATUS_OKAY(DT_NODELABEL(uart0))
+	MMU_REGION_FLAT_ENTRY("uart0",
+			      DT_REG_ADDR(DT_NODELABEL(uart0)),
+			      DT_REG_SIZE(DT_NODELABEL(uart0)),
+			      MT_DEVICE | MATTR_SHARED | MPERM_R | MPERM_W),
+#endif
+#if DT_NODE_HAS_STATUS_OKAY(DT_NODELABEL(uart1))
+	MMU_REGION_FLAT_ENTRY("uart1",
+			      DT_REG_ADDR(DT_NODELABEL(uart1)),
+			      DT_REG_SIZE(DT_NODELABEL(uart1)),
+			      MT_DEVICE | MATTR_SHARED | MPERM_R | MPERM_W),
+#endif
 
 DT_FOREACH_STATUS_OKAY(xlnx_xps_gpio_1_00_a, AXI_GPIO_MMU_ENTRY)
 
@@ -63,7 +75,7 @@ const struct arm_mmu_config mmu_config = {
 
 /* Platform-specific early initialization */
 
-void soc_reset_hook(void)
+__weak void soc_reset_hook(void)
 {
 	/*
 	 * When coming out of u-boot rather than downloading the Zephyr binary

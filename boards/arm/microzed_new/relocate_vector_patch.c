@@ -27,11 +27,7 @@ static void flush_dcache_range(uint32_t start, uint32_t size)
  */
 void relocate_vector_table(void)
 {
-#if 0
     uint32_t *vector_table = (uint32_t *)_microzed_vector_start;
-#else
-    uint32_t *vector_table = 0x0;
-#endif
     /* Disable interrupts if you’re in the middle of setup */
     __asm volatile ("cpsid i" : : : "memory");
 
@@ -43,7 +39,7 @@ void relocate_vector_table(void)
         "mcr p15, 0, %0, c12, c0, 0\n"  /* Write VBAR */
         : : "r"(vector_table) : "memory"
     );
-    flush_dcache_range((uint32_t)vector_table, 0x400);  // Vector table
+    flush_dcache_range((uint32_t)_microzed_vector_start, 0x400);  // Vector table
 //     flush_dcache_range(0x00000fc0, 0x10000);  // Zephyr image region
 
     /* Optional: invalidate I‐cache so new vectors are fetched fresh */

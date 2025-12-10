@@ -8,5 +8,5 @@ board_runner_args(jlink
   "--reset"
   "--tool-opt=-jtagconf -1,-1"
 )
-
 include(${ZEPHYR_BASE}/boards/common/jlink.board.cmake)
+

@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: Apache-2.0
+
+menuconfig FLASH_NXP_S32K1XX
+    bool "NXP S32K1xx internal flash driver"
+    depends on SOC_S32K148
+    select FLASH_HAS_DRIVER_ENABLED
+    select FLASH_HAS_PAGE_LAYOUT      # ensure page layout API is available
+    help
+      Enable on-chip program flash driver for NXP S32K1xx devices (FTFC).
+      This driver provides read/erase/write support for the internal flash
+      and integrates with Zephyr's flash map subsystem.
+
+if FLASH_NXP_S32K1XX
+
+config FLASH_NXP_S32K1XX_VERIFY
+    bool "Verify after write"
+    default y
+    help
+      Read back and compare after write for robustness.
+
+endif # FLASH_NXP_S32K1XX

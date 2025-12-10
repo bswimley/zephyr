@@ -17,11 +17,13 @@
 
 	chosen {
 		zephyr,sram = &sram_l;
+        	zephyr,flash-controller = &flash0;
 		zephyr,flash = &flash0;
 		zephyr,console = &lpuart1;
 		zephyr,shell-uart = &lpuart1;
 		zephyr,uart-pipe = &lpuart1;
 		zephyr,canbus = &flexcan0;
+        	zephyr,code-partition = &slot0_partition;
 	};
 
 	aliases {
@@ -92,6 +94,46 @@
 			zephyr,code = <INPUT_KEY_1>;
 		};
 	};
+};
+
+/* Bind the internal program flash array as the driver device */
+&flash0 {
+    compatible = "nxp,s32k1xx-flash";
+    reg = <0x00000000 DT_SIZE_K(1536)>;   /* mapped base 0x0, size 2 MB */
+    erase-block-size = <4096>;       /* 4 KB sector */
+    write-block-size = <8>;          /* 8-byte phrase */
+    status = "okay";
+
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        boot_partition: boot_partition@0 {
+            label = "mcuboot";
+            reg = <0x00000000 0x00020000>; /* 128 KB */
+        };
+
+        slot0_partition: image-0@20000 {
+            label = "image-0";
+            reg = <0x00020000 0x00080000>; /* 512 KB */
+        };
+
+        slot1_partition: image-1@A0000 {
+            label = "image-1";
+            reg = <0x000A0000 0x00080000>; /* 512 KB */
+        };
+
+        scratch_partition: scratch@120000 {
+            label = "scratch";
+            reg = <0x00120000 0x00008000>; /* 32 KB */
+        };
+
+        storage_partition: storage@128000 {
+            label = "storage";
+            reg = <0x00128000 0x000F0000>; /* ~960 KB */
+        };
+    };
 };
 
 &cpu0 {

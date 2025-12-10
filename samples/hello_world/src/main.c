@@ -13,7 +13,7 @@
 int main(void)
 {
 
-	printf("Hello World! %s\n", CONFIG_BOARD_TARGET);
+    printf("Hello World! %s\n", CONFIG_BOARD_TARGET);
 
     while (1) {
         k_sleep(K_FOREVER);
